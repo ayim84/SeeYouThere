@@ -1,26 +1,67 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Input from "./components/Form";
 
 class App extends Component {
+  state =
+  {
+    location1: "",
+    location2: "",
+    location3: "",
+    location4: ""
+  };
+
+  handleInputChange = event =>
+  {
+    const {name, value} = event.target;
+    this.setState({
+      [name]: value
+    });
+  };
+
+  handleFormSubmit = event =>
+  {
+    event.preventDefault();
+
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <form>
+        <Input
+          type="text"
+          placeholder="Location 1"
+          name="location1"
+          value={this.state.location1}
+          onChange={this.handleInputChange}
+        />
+        <Input
+          type="text"
+          placeholder="Location 2"
+          name="location2"
+          value={this.state.location2}
+          onChange={this.handleInputChange}
+        />
+        <Input
+          type="text"
+          placeholder="Location 3"
+          name="location3"
+          value={this.state.location3}
+          onChange={this.handleInputChange}
+        />
+        <Input
+          type="text"
+          placeholder="Location 4"
+          name="location4"
+          value={this.state.location4}
+          onChange={this.handleInputChange}
+        />
+        <Input
+          value="Submit"
+          type="submit"
+          onClick={this.handleFormSubmit}
+        />
+      </form>
     );
   }
 }
