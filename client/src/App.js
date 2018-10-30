@@ -1,6 +1,6 @@
 import React, { Fragment, Component } from 'react';
 import './App.css';
-import {Row, Col, Input, Button, Icon} from 'react-materialize';
+import {Row, Col, Input, Button, Icon, Dropdown, NavItem} from 'react-materialize';
 import API from "./utils/API";
 
 class App extends Component {
@@ -11,7 +11,9 @@ class App extends Component {
     location3: "",
     location4: "",
     locationsArray: [],
-    center: ""
+    centerLat: "",
+    centerLong: "",
+    category: ""
   };
 
   handleInputChange = event =>
@@ -20,6 +22,7 @@ class App extends Component {
     this.setState({
       [name]: value
     });
+    console.log(this.state.category);
   };
 
   handleFormSubmit = event =>
@@ -36,11 +39,13 @@ class App extends Component {
 
     // Need to figure out replacement for setTimeout using promises
 
-    // setTimeout(() => 
-    // {
-    //   console.log(this.state.locationsArray);
-    //   this.getCenter(this.state.locationsArray);
-    // }, 750);
+    setTimeout(() => 
+    {
+      console.log(this.state.locationsArray);
+      this.getCenter(this.state.locationsArray);
+      API.yelp(this.state.centerLat, this.state.centerLong)
+      .then(res => console.log("yelp res: ", res));
+    }, 750);
     
     // for(let i = 0; i < locations.length; i++)
     // {
@@ -57,7 +62,7 @@ class App extends Component {
     {
       if(locations[i] !== "")
       {
-        API.search(locations[i])
+        API.googleLocation(locations[i])
         .then(res =>
           {
             const googleMapsResults = res.data.results[0];
@@ -78,7 +83,7 @@ class App extends Component {
 
   // getLatLong = location =>
   // {
-  //   API.search(location)
+  //   API.googleLocation(location)
   //     .then(res => 
   //       {
   //         const googleMapsResults = res.data.results[0];
@@ -132,7 +137,9 @@ class App extends Component {
     let newX = (lat * 180 / Math.PI);
     let newY = (lon * 180 / Math.PI);
 
-    console.log("Center Point: " + newX + ", " + newY);
+    this.setState({centerLat: newX, centerLong: newY});
+
+    console.log("Center Point: " + this.state.centerLat + ", " + this.state.centerLong);
 
     // return new Array(newX, newY);
   }
@@ -171,6 +178,18 @@ class App extends Component {
           />
         </Row>
         <Row>
+          <Col>
+            <Input 
+              type='select' 
+              label="Category"
+              name="category"
+              value={this.state.category}
+              onChange={this.handleInputChange}  
+            >
+              <option value='Restaurants'>Restaurants</option>
+              <option value='Bars'>Bars</option>
+            </Input>
+          </Col>
           <Col>
             <Button
               waves="light"
