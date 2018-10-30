@@ -31,16 +31,16 @@ class App extends Component {
     this.setState({locationsArray: []});
 
     locations.push(this.state.location1, this.state.location2, this.state.location3, this.state.location4);
-
+    
     this.getLatLong(locations);
 
     // Need to figure out replacement for setTimeout using promises
 
-    setTimeout(() => 
-    {
-      console.log(this.state.locationsArray);
-      this.getCenter(this.state.locationsArray);
-    }, 750);
+    // setTimeout(() => 
+    // {
+    //   console.log(this.state.locationsArray);
+    //   this.getCenter(this.state.locationsArray);
+    // }, 750);
     
     // for(let i = 0; i < locations.length; i++)
     // {
@@ -73,6 +73,7 @@ class App extends Component {
           .catch(err => console.log(err));
       }
     }
+    return this.getCenter(this.state.locationsArray)
   }
 
   // getLatLong = location =>
