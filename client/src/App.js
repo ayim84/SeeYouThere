@@ -2,6 +2,8 @@ import React, { Fragment, Component } from 'react';
 import './App.css';
 import {Row, Col, Input, Button, Icon, Dropdown, NavItem} from 'react-materialize';
 import API from "./utils/API";
+import Nav from "./components/Nav/Nav.js";
+
 
 class App extends Component {
   state =
@@ -144,9 +146,11 @@ class App extends Component {
     // return new Array(newX, newY);
   }
 
+  
   render() {
     return (
       <Fragment>
+        <Nav />
         <Row>
           <Input 
             s={3} 
