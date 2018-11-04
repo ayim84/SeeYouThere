@@ -2,6 +2,8 @@ import React, { Fragment, Component } from 'react';
 import './App.css';
 import {Row, Col, Input, Button, Icon, Dropdown, NavItem} from 'react-materialize';
 import API from "./utils/API";
+import Nav from "./components/Nav/Nav.js";
+
 
 class App extends Component {
   state =
@@ -34,7 +36,7 @@ class App extends Component {
     this.setState({locationsArray: []});
 
     locations.push(this.state.location1, this.state.location2, this.state.location3, this.state.location4);
-
+    
     this.getLatLong(locations);
 
     // Need to figure out replacement for setTimeout using promises
@@ -78,6 +80,7 @@ class App extends Component {
           .catch(err => console.log(err));
       }
     }
+    return this.getCenter(this.state.locationsArray)
   }
 
   // getLatLong = location =>
@@ -143,9 +146,11 @@ class App extends Component {
     // return new Array(newX, newY);
   }
 
+  
   render() {
     return (
       <Fragment>
+        <Nav />
         <Row>
           <Input 
             s={3} 
