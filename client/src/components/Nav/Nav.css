@@ -1,0 +1,17 @@
+.navBar {
+    background: rgba(0, 0, 0, 0);
+    border: none;
+}
+
+
+.small.card {
+    background-image: url(../../images/cables-decorative-hanging-247646.jpg);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    /* opacity: .75; */
+    text-align: center;
+    color: rgb(245, 245, 245);
+    font-family: 'Courgette', cursive;
+    font-size: 8rem;
+    padding-bottom: 100px;
+}

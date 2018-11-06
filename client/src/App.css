@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -20,7 +20,22 @@
 
 .App-link {
   color: #61dafb;
+} */
+
+.btn {
+  background-color: rgb(238, 133, 75);
+  color: rgb(245, 245, 245);
 }
+
+.btn:hover {
+  background-color: rgb(149, 176, 191);
+  color: rgb(245, 245, 245)
+}
+
+html {
+  background-color: rgb(245, 245, 245);
+}
+
 
 @keyframes App-logo-spin {
   from {
