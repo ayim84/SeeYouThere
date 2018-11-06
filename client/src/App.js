@@ -1,6 +1,6 @@
 import React, { Fragment, Component } from 'react';
 import './App.css';
-import {Row, Col, Input, Button, Icon, Dropdown, NavItem} from 'react-materialize';
+import {Row, Col, Input, Button, Icon} from 'react-materialize';
 import API from "./utils/API";
 
 class App extends Component {
@@ -22,7 +22,6 @@ class App extends Component {
     this.setState({
       [name]: value
     });
-    console.log(this.state.category);
   };
 
   handleFormSubmit = event =>
@@ -46,57 +45,58 @@ class App extends Component {
       API.yelp(this.state.centerLat, this.state.centerLong)
       .then(res => console.log("yelp res: ", res));
     }, 750);
-    
-    // for(let i = 0; i < locations.length; i++)
-    // {
-    //   if(locations[i] !== "")
-    //   {
-    //     this.getLatLong(locations[i]);
-    //   }
-    // }
   };
 
   getLatLong = locations =>
   {
-    for(let i =0; i < locations.length; i++)
+    Promise.all(locations.map((location) =>
     {
-      if(locations[i] !== "")
+      return new Promise((resolve, reject) =>
       {
-        API.googleLocation(locations[i])
-        .then(res =>
-          {
-            const googleMapsResults = res.data.results[0];
-            const lat = googleMapsResults.geometry.location.lat;
-            const long = googleMapsResults.geometry.location.lng;
+        if(location != "")
+        {
+          API.googleLocation(location)
+          .then(res =>
+            {
+              const googleMapsResults = res.data.results[0];
+              const lat = googleMapsResults.geometry.location.lat;
+              const long = googleMapsResults.geometry.location.lng;
 
-            let coords = [lat, long];
+              let coords = [lat, long];
 
-            this.setState(prevState => ({locationsArray: [...prevState.locationsArray, coords]}));
+              this.setState(prevState => ({locationsArray: [...prevState.locationsArray, coords]}));
 
-            console.log("Locations Array: ", this.state.locationsArray);
-          })
-          .catch(err => console.log(err));
-      }
-    }
+              console.log("Locations Array: ", this.state.locationsArray);
+            })
+            .catch(err => console.log(err));
+        }
+      });
+    }));
+
+
+
+    // for(let i =0; i < locations.length; i++)
+    // {
+    //   if(locations[i] !== "")
+    //   {
+    //     API.googleLocation(locations[i])
+    //     .then(res =>
+    //       {
+    //         const googleMapsResults = res.data.results[0];
+    //         const lat = googleMapsResults.geometry.location.lat;
+    //         const long = googleMapsResults.geometry.location.lng;
+
+    //         let coords = [lat, long];
+
+    //         this.setState(prevState => ({locationsArray: [...prevState.locationsArray, coords]}));
+
+    //         console.log("Locations Array: ", this.state.locationsArray);
+
+    //       })
+    //       .catch(err => console.log(err));
+    //   }
+    // }
   }
-
-  // getLatLong = location =>
-  // {
-  //   API.googleLocation(location)
-  //     .then(res => 
-  //       {
-  //         const googleMapsResults = res.data.results[0];
-  //         const lat = googleMapsResults.geometry.location.lat;
-  //         const long = googleMapsResults.geometry.location.lng;
-
-  //         let coords = [lat, long];
-
-  //         this.setState(prevState => ({locationsArray: [...prevState.locationsArray, coords]}));
-
-  //         console.log("Locations Array: ", this.state.locationsArray);
-  //       })
-  //     .catch(err => console.log(err));
-  // }
 
   getCenter = coordinates =>
   {
