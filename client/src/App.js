@@ -4,7 +4,6 @@ import {Row, Col, Input, Button, Icon} from 'react-materialize';
 import API from "./utils/API";
 import Nav from "./components/Nav/Nav.js";
 
-
 class App extends Component {
   state =
   {
@@ -37,67 +36,54 @@ class App extends Component {
     locations.push(this.state.location1, this.state.location2, this.state.location3, this.state.location4);
     
     this.getLatLong(locations);
-
-    // Need to figure out replacement for setTimeout using promises
-
-    setTimeout(() => 
-    {
-      console.log(this.state.locationsArray);
-      this.getCenter(this.state.locationsArray);
-      API.yelp(this.state.centerLat, this.state.centerLong)
-      .then(res => console.log("yelp res: ", res));
-    }, 750);
   };
 
-  getLatLong = locations =>
+
+ getLatLong = locations =>
   {
-    Promise.all(locations.map((location) =>
+    const completeLocations = [];
+
+    for(let i = 0; i < locations.length; i++)
+    {
+      if(locations[i] !== "")
+      {
+        completeLocations.push(locations[i]);
+      }
+    }
+
+    Promise.all(completeLocations.map((location) =>
     {
       return new Promise((resolve, reject) =>
       {
-        if(location != "")
+        if(location !== "")
         {
           API.googleLocation(location)
           .then(res =>
             {
-              const googleMapsResults = res.data.results[0];
-              const lat = googleMapsResults.geometry.location.lat;
-              const long = googleMapsResults.geometry.location.lng;
-
-              let coords = [lat, long];
-
-              this.setState(prevState => ({locationsArray: [...prevState.locationsArray, coords]}));
-
-              console.log("Locations Array: ", this.state.locationsArray);
+              resolve(res);
             })
-            .catch(err => console.log(err));
+          .catch(err => console.log(err));
         }
       });
-    }));
+    }))
+    .then(res =>
+      {
+        for(let i = 0; i < res.length; i++)
+        {
+          const googleMapsResults = res[i].data.results[0];
+          const lat = googleMapsResults.geometry.location.lat;
+          const long = googleMapsResults.geometry.location.lng;
 
+          let coords = [lat, long];
+          this.setState(prevState => ({locationsArray: [...prevState.locationsArray, coords]}));
+        }
 
+        this.getCenter(this.state.locationsArray);
+        
+        API.yelp(this.state.centerLat, this.state.centerLong)
+        .then(res => console.log("yelp res: ", res));
 
-    // for(let i =0; i < locations.length; i++)
-    // {
-    //   if(locations[i] !== "")
-    //   {
-    //     API.googleLocation(locations[i])
-    //     .then(res =>
-    //       {
-    //         const googleMapsResults = res.data.results[0];
-    //         const lat = googleMapsResults.geometry.location.lat;
-    //         const long = googleMapsResults.geometry.location.lng;
-
-    //         let coords = [lat, long];
-
-    //         this.setState(prevState => ({locationsArray: [...prevState.locationsArray, coords]}));
-
-    //         console.log("Locations Array: ", this.state.locationsArray);
-
-    //       })
-    //       .catch(err => console.log(err));
-    //   }
-    // }
+      });
   }
 
   getCenter = coordinates =>
@@ -187,7 +173,7 @@ class App extends Component {
               label="Category"
               name="category"
               value={this.state.category}
-              onChange={this.handleInputChange}  
+              onChange={this.handleInputChange}
             >
               <option value='Restaurants'>Restaurants</option>
               <option value='Bars'>Bars</option>
