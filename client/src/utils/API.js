@@ -3,7 +3,7 @@ import axios from "axios";
 const googleURL = "https://maps.googleapis.com/maps/api/geocode/json?address=";
 const googleAPIKEY = "&key=AIzaSyCZHm522MDtZTsy5gXFX2ni9rsUYdKXCh4"; 
 
-const yelpURL = "https://api.yelp.com/v3/businesses/search?";
+const yelpURL = "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?";
 
 // export default {
 //     googleLocation: function(location)

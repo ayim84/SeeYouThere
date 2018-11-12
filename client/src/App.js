@@ -37,17 +37,18 @@ class App extends Component {
 
     locations.push(this.state.location1, this.state.location2, this.state.location3, this.state.location4);
     
-    this.getLatLong(locations);
+    this.getLatLong(locations)
 
+    
     // Need to figure out replacement for setTimeout using promises
 
-    setTimeout(() => 
-    {
-      console.log(this.state.locationsArray);
-      this.getCenter(this.state.locationsArray);
-      API.yelp(this.state.centerLat, this.state.centerLong)
-      .then(res => console.log("yelp res: ", res));
-    }, 750);
+    // setTimeout(() => 
+    // {
+    //   console.log(this.state.locationsArray);
+    //   this.getCenter(this.state.locationsArray);
+    //   API.yelp(this.state.centerLat, this.state.centerLong)
+    //   .then(res => console.log("yelp res: ", res));
+    // }, 750);
     
     // for(let i = 0; i < locations.length; i++)
     // {
@@ -79,8 +80,7 @@ class App extends Component {
           })
           .catch(err => console.log(err));
       }
-    }
-    return this.getCenter(this.state.locationsArray)
+    }   
   }
 
   // getLatLong = location =>
