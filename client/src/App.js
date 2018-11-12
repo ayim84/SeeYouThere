@@ -1,9 +1,10 @@
 import React, { Fragment, Component } from 'react';
 import './App.css';
-import {Row, Col, Input, Button, Icon, Dropdown, NavItem} from 'react-materialize';
+import {Row, Col, Input, Button, Icon, Container} from 'react-materialize';
 import API from "./utils/API";
 import Nav from "./components/Nav/Nav.js";
-
+import MapContainer from "./components/MapContainer.js";
+import {List, ListItem} from "./components/List";
 
 class App extends Component {
   state =
@@ -13,9 +14,11 @@ class App extends Component {
     location3: "",
     location4: "",
     locationsArray: [],
-    centerLat: "",
-    centerLong: "",
-    category: ""
+    locationsObjArray: [],
+    centerLat: 37.09024,
+    centerLong: -95.712891,
+    category: "restaurants",
+    places: []
   };
 
   handleInputChange = event =>
@@ -24,7 +27,6 @@ class App extends Component {
     this.setState({
       [name]: value
     });
-    console.log(this.state.category);
   };
 
   handleFormSubmit = event =>
@@ -38,68 +40,65 @@ class App extends Component {
     locations.push(this.state.location1, this.state.location2, this.state.location3, this.state.location4);
     
     this.getLatLong(locations);
-
-    // Need to figure out replacement for setTimeout using promises
-
-    setTimeout(() => 
-    {
-      console.log(this.state.locationsArray);
-      this.getCenter(this.state.locationsArray);
-      API.yelp(this.state.centerLat, this.state.centerLong)
-      .then(res => console.log("yelp res: ", res));
-    }, 750);
-    
-    // for(let i = 0; i < locations.length; i++)
-    // {
-    //   if(locations[i] !== "")
-    //   {
-    //     this.getLatLong(locations[i]);
-    //   }
-    // }
   };
 
-  getLatLong = locations =>
+
+ getLatLong = locations =>
   {
-    for(let i =0; i < locations.length; i++)
+    const completeLocations = [];
+
+    for(let i = 0; i < locations.length; i++)
     {
       if(locations[i] !== "")
       {
-        API.googleLocation(locations[i])
-        .then(res =>
-          {
-            const googleMapsResults = res.data.results[0];
-            const lat = googleMapsResults.geometry.location.lat;
-            const long = googleMapsResults.geometry.location.lng;
-
-            let coords = [lat, long];
-
-            this.setState(prevState => ({locationsArray: [...prevState.locationsArray, coords]}));
-
-            console.log("Locations Array: ", this.state.locationsArray);
-          })
-          .catch(err => console.log(err));
+        completeLocations.push(locations[i]);
       }
     }
-    return this.getCenter(this.state.locationsArray)
+
+    Promise.all(completeLocations.map((location) =>
+    {
+      return new Promise((resolve, reject) =>
+      {
+        if(location !== "")
+        {
+          API.googleLocation(location)
+          .then(res =>
+            {
+              resolve(res);
+            })
+          .catch(err => console.log(err));
+        }
+      });
+    }))
+    .then(res =>
+      {
+        for(let i = 0; i < res.length; i++)
+        {
+          const googleMapsResults = res[i].data.results[0];
+          const lat = googleMapsResults.geometry.location.lat;
+          const long = googleMapsResults.geometry.location.lng;
+
+          let coords = [lat, long];
+          this.setState(prevState => ({locationsArray: [...prevState.locationsArray, coords]}));
+
+          let coordsObj = {lat: lat, lng: long};
+          this.setState(prevState => ({locationsObjArray: [...prevState.locationsObjArray, coordsObj]}));
+        }
+
+        this.getCenter(this.state.locationsArray);
+
+        this.loadPlaces(this.state.centerLat, this.state.centerLong, this.state.category);
+      });
   }
 
-  // getLatLong = location =>
-  // {
-  //   API.googleLocation(location)
-  //     .then(res => 
-  //       {
-  //         const googleMapsResults = res.data.results[0];
-  //         const lat = googleMapsResults.geometry.location.lat;
-  //         const long = googleMapsResults.geometry.location.lng;
-
-  //         let coords = [lat, long];
-
-  //         this.setState(prevState => ({locationsArray: [...prevState.locationsArray, coords]}));
-
-  //         console.log("Locations Array: ", this.state.locationsArray);
-  //       })
-  //     .catch(err => console.log(err));
-  // }
+  loadPlaces = (lat, long, cat) =>
+  {
+    API.yelp(lat, long, cat)
+    .then(res => {
+      this.setState({places: res.data.businesses});
+      console.log("Places: ", this.state.places);
+    });
+  }
 
   getCenter = coordinates =>
   {
@@ -141,7 +140,7 @@ class App extends Component {
 
     this.setState({centerLat: newX, centerLong: newY});
 
-    console.log("Center Point: " + this.state.centerLat + ", " + this.state.centerLong);
+    // console.log("Center Point: " + this.state.centerLat + ", " + this.state.centerLong);
 
     // return new Array(newX, newY);
   }
@@ -151,6 +150,7 @@ class App extends Component {
     return (
       <Fragment>
         <Nav />
+        <Container>
         <Row>
           <Input 
             s={3} 
@@ -188,10 +188,10 @@ class App extends Component {
               label="Category"
               name="category"
               value={this.state.category}
-              onChange={this.handleInputChange}  
+              onChange={this.handleInputChange}
             >
-              <option value='Restaurants'>Restaurants</option>
-              <option value='Bars'>Bars</option>
+              <option value='restaurants'>Restaurants</option>
+              <option value='bars'>Bars</option>
             </Input>
           </Col>
           <Col>
@@ -207,6 +207,36 @@ class App extends Component {
             </Button>
           </Col>
         </Row>
+        <Row>
+          <Col>
+            <MapContainer
+              locationsArray={this.state.locationsArray}
+              locationsObjArray={this.state.locationsObjArray}
+              centerLat={this.state.centerLat}
+              centerLong={this.state.centerLong}
+            />
+          </Col>
+          <Col s={4} offset="s8">
+            {this.state.places.length ?
+            (
+              <List>
+                {this.state.places.map(place =>
+                  (
+                    <ListItem key={place.name}>
+                      <p><strong>
+                        {place.name}
+                      </strong></p>
+                      <p>{place.display_phone}</p>
+                    </ListItem>
+                  ))}
+              </List>
+            ) :
+            (
+              <h3>No Results</h3>
+            )}
+          </Col>
+        </Row>
+        </Container>
       </Fragment>
     );
   }
