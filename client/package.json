@@ -5,10 +5,12 @@
   "proxy": "http://localhost:3001",
   "dependencies": {
     "axios": "^0.18.0",
+    "google-maps-react": "^2.0.2",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-materialize": "^2.4.7",
-    "react-scripts": "2.0.5"
+    "react-scripts": "2.0.5",
+    "yelp-fusion": "^2.2.1"
   },
   "scripts": {
     "start": "react-scripts start",
