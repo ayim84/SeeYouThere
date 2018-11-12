@@ -1,8 +1,10 @@
 import React, { Fragment, Component } from 'react';
 import './App.css';
-import {Row, Col, Input, Button, Icon} from 'react-materialize';
+import {Row, Col, Input, Button, Icon, Container} from 'react-materialize';
 import API from "./utils/API";
 import Nav from "./components/Nav/Nav.js";
+import MapContainer from "./components/MapContainer.js";
+import {List, ListItem} from "./components/List";
 
 class App extends Component {
   state =
@@ -12,9 +14,11 @@ class App extends Component {
     location3: "",
     location4: "",
     locationsArray: [],
-    centerLat: "",
-    centerLong: "",
-    category: ""
+    locationsObjArray: [],
+    centerLat: 37.09024,
+    centerLong: -95.712891,
+    category: "restaurants",
+    places: []
   };
 
   handleInputChange = event =>
@@ -76,14 +80,24 @@ class App extends Component {
 
           let coords = [lat, long];
           this.setState(prevState => ({locationsArray: [...prevState.locationsArray, coords]}));
+
+          let coordsObj = {lat: lat, lng: long};
+          this.setState(prevState => ({locationsObjArray: [...prevState.locationsObjArray, coordsObj]}));
         }
 
         this.getCenter(this.state.locationsArray);
-        
-        API.yelp(this.state.centerLat, this.state.centerLong)
-        .then(res => console.log("yelp res: ", res));
 
+        this.loadPlaces(this.state.centerLat, this.state.centerLong, this.state.category);
       });
+  }
+
+  loadPlaces = (lat, long, cat) =>
+  {
+    API.yelp(lat, long, cat)
+    .then(res => {
+      this.setState({places: res.data.businesses});
+      console.log("Places: ", this.state.places);
+    });
   }
 
   getCenter = coordinates =>
@@ -126,7 +140,7 @@ class App extends Component {
 
     this.setState({centerLat: newX, centerLong: newY});
 
-    console.log("Center Point: " + this.state.centerLat + ", " + this.state.centerLong);
+    // console.log("Center Point: " + this.state.centerLat + ", " + this.state.centerLong);
 
     // return new Array(newX, newY);
   }
@@ -136,6 +150,7 @@ class App extends Component {
     return (
       <Fragment>
         <Nav />
+        <Container>
         <Row>
           <Input 
             s={3} 
@@ -175,8 +190,8 @@ class App extends Component {
               value={this.state.category}
               onChange={this.handleInputChange}
             >
-              <option value='Restaurants'>Restaurants</option>
-              <option value='Bars'>Bars</option>
+              <option value='restaurants'>Restaurants</option>
+              <option value='bars'>Bars</option>
             </Input>
           </Col>
           <Col>
@@ -192,6 +207,36 @@ class App extends Component {
             </Button>
           </Col>
         </Row>
+        <Row>
+          <Col>
+            <MapContainer
+              locationsArray={this.state.locationsArray}
+              locationsObjArray={this.state.locationsObjArray}
+              centerLat={this.state.centerLat}
+              centerLong={this.state.centerLong}
+            />
+          </Col>
+          <Col s={4} offset="s8">
+            {this.state.places.length ?
+            (
+              <List>
+                {this.state.places.map(place =>
+                  (
+                    <ListItem key={place.name}>
+                      <p><strong>
+                        {place.name}
+                      </strong></p>
+                      <p>{place.display_phone}</p>
+                    </ListItem>
+                  ))}
+              </List>
+            ) :
+            (
+              <h3>No Results</h3>
+            )}
+          </Col>
+        </Row>
+        </Container>
       </Fragment>
     );
   }
