@@ -216,6 +216,8 @@ class App extends Component {
               centerLong={this.state.centerLong}
             />
           </Col>
+        </Row>
+        <Row>
           <Col s={4} offset="s8">
             {this.state.places.length ?
             (
