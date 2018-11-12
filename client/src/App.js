@@ -18,7 +18,7 @@ class App extends Component {
     centerLat: 37.09024,
     centerLong: -95.712891,
     category: "restaurants",
-    places: []
+    placesArray: []
   };
 
   handleInputChange = event =>
@@ -95,8 +95,8 @@ class App extends Component {
   {
     API.yelp(lat, long, cat)
     .then(res => {
-      this.setState({places: res.data.businesses});
-      console.log("Places: ", this.state.places);
+      this.setState({placesArray: res.data.businesses});
+      console.log("Places: ", this.state.placesArray);
     });
   }
 
@@ -212,6 +212,7 @@ class App extends Component {
             <MapContainer
               locationsArray={this.state.locationsArray}
               locationsObjArray={this.state.locationsObjArray}
+              placesArray={this.state.placesArray}
               centerLat={this.state.centerLat}
               centerLong={this.state.centerLong}
             />
@@ -219,10 +220,10 @@ class App extends Component {
         </Row>
         <Row>
           <Col s={4} offset="s8">
-            {this.state.places.length ?
+            {this.state.placesArray.length ?
             (
               <List>
-                {this.state.places.map(place =>
+                {this.state.placesArray.map(place =>
                   (
                     <ListItem key={place.name}>
                       <p><strong>

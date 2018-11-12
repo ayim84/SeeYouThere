@@ -9,17 +9,16 @@ export class MapContainer extends Component {
         const style =
         {
             width: '40%',
-            height: '50%'
+            height: '70%'
         }
 
         let bounds = new this.props.google.maps.LatLngBounds();
-        
-        for (let i = 0; i < this.props.locationsObjArray.length; i++) 
-        {
+
+        for (let i = 0; i < this.props.locationsObjArray.length; i++) {
             bounds.extend(this.props.locationsObjArray[i]);
         }
-    
-        return ( 
+
+        return (
             <Fragment>
                 <Map
                     google={this.props.google}
@@ -39,13 +38,15 @@ export class MapContainer extends Component {
                             lng: this.props.centerLong
                         }
                     }
-                    bounds={bounds} 
+                    bounds={bounds}
                 >
                     {this.props.locationsArray.length > 0 ?
                         (
                             <Marker
                                 name={'Center'}
-                                position={{ lat: this.props.centerLat, lng: this.props.centerLong }} />
+                                position={{ lat: this.props.centerLat, lng: this.props.centerLong }}
+                                label="A"
+                            />
                         ) :
                         (
                             <Fragment></Fragment>
@@ -56,11 +57,30 @@ export class MapContainer extends Component {
                             <Marker
                                 position={{ lat: location[0], lng: location[1] }}
                                 key={location}
+                                icon=
+                                {
+                                    {
+                                        url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                                    }
+                                }
                             >
                             </Marker>
                         ))}
+                    {this.props.placesArray.map(place => 
+                        (
+                            <Marker
+                                position={{lat: place.coordinates.latitude, lng: place.coordinates.longitude}}
+                                key={place.alias}
+                                icon=
+                                {
+                                    {
+                                        url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+                                    }
+                                }
+                            />
+                        ))}
                 </Map>
-            </Fragment> 
+            </Fragment>
         );
     }
 }
