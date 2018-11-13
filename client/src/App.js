@@ -32,6 +32,7 @@ class App extends Component {
   handleFormSubmit = event =>
   {
     event.preventDefault();
+    console.log("Submit event target: ", event.target);
 
     let locations = [];
 
@@ -223,7 +224,7 @@ class App extends Component {
               <List>
                 {this.state.placesArray.map(place =>
                   (
-                    <ListItem key={place.name}>
+                    <ListItem key={place.alias}>
                       <p><strong>
                         {place.name}
                       </strong></p>

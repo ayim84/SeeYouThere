@@ -2,9 +2,21 @@ import React, { Fragment, Component } from 'react';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 
 export class MapContainer extends Component {
+    shouldComponentUpdate(nextProps, nextState)
+        {
+            if(this.props.placesArray === nextProps.placesArray)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+    
     render() {
-        // console.log("props: ", this.props);
-        // console.log("Locations Array!: ", this.props.locationsArray[0]);
+        console.log("props: ", this.props);
+        // console.log("Locations Array: ", this.props.locationsArray[0]);
 
         const style =
         {
@@ -17,6 +29,8 @@ export class MapContainer extends Component {
         for (let i = 0; i < this.props.locationsObjArray.length; i++) {
             bounds.extend(this.props.locationsObjArray[i]);
         }
+
+        console.log("Bounds: " + bounds);
 
         return (
             <Fragment>
@@ -45,7 +59,6 @@ export class MapContainer extends Component {
                             <Marker
                                 name={'Center'}
                                 position={{ lat: this.props.centerLat, lng: this.props.centerLong }}
-                                label="A"
                             />
                         ) :
                         (
