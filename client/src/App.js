@@ -1,6 +1,6 @@
 import React, { Fragment, Component } from 'react';
 import './App.css';
-import {Row, Col, Input, Button, Icon, Container} from 'react-materialize';
+import {Row, Col, Input, Button, Icon, Container, Collapsible, CollapsibleItem} from 'react-materialize';
 import API from "./utils/API";
 import Nav from "./components/Nav/Nav.js";
 import MapContainer from "./components/MapContainer.js";
@@ -217,20 +217,24 @@ class App extends Component {
               centerLong={this.state.centerLong}
             />
           </Col>
+        </Row>
+        <Row>
           <Col s={4} offset="s8">
             {this.state.placesArray.length ?
             (
-              <List>
+              <Collapsible>
                 {this.state.placesArray.map(place =>
                   (
-                    <ListItem key={place.name}>
-                      <p><strong>
-                        {place.name}
-                      </strong></p>
+                    <CollapsibleItem header={place.name}>
+                      <p><a href={place.url} target="_blank" rel="noopener noreferrer">{place.name}</a></p>
                       <p>{place.display_phone}</p>
-                    </ListItem>
+                      {place.categories.map(categories =>
+                      (
+                        <i>{categories.title} </i>
+                      ))}
+                    </CollapsibleItem>
                   ))}
-              </List>
+              </Collapsible>
             ) :
             (
               <h3>No Results</h3>
