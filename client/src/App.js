@@ -1,10 +1,10 @@
 import React, { Fragment, Component } from 'react';
 import './App.css';
-import {Row, Col, Input, Button, Icon, Container, Collapsible, CollapsibleItem} from 'react-materialize';
+import {Row, Col, Input, Button, Icon, Container, Collapsible, CollapsibleItem, M, options} from 'react-materialize';
 import API from "./utils/API";
 import Nav from "./components/Nav/Nav.js";
 import MapContainer from "./components/MapContainer.js";
-import {List, ListItem} from "./components/List";
+import {List, ListItem, ListHeader} from "./components/List";
 
 class App extends Component {
   state =
@@ -18,7 +18,8 @@ class App extends Component {
     centerLat: 37.09024,
     centerLong: -95.712891,
     category: "restaurants",
-    placesArray: []
+    placesArray: [],
+    showingInfoWindow: true,
   };
 
   handleInputChange = event =>
@@ -41,6 +42,7 @@ class App extends Component {
     locations.push(this.state.location1, this.state.location2, this.state.location3, this.state.location4);
     
     this.getLatLong(locations);
+    this.setState({showingInfoWindow: false})
   };
 
 
@@ -146,6 +148,8 @@ class App extends Component {
     // return new Array(newX, newY);
   }
 
+
+
   
   render() {
     return (
@@ -216,6 +220,7 @@ class App extends Component {
               placesArray={this.state.placesArray}
               centerLat={this.state.centerLat}
               centerLong={this.state.centerLong}
+              showingInfoWindow={this.state.showingInfoWindow}
             />
           </Col>
         </Row>
@@ -223,19 +228,20 @@ class App extends Component {
         <Col s={4} offset="s8">
             {this.state.placesArray.length ?
             (
-              <Collapsible>
+              <List>
+                <ListHeader>Places</ListHeader>
                 {this.state.placesArray.map(place =>
                   (
-                    <CollapsibleItem header={place.name} key={place.id}>
-                      <p><a href={place.url} target="_blank" rel="noopener noreferrer">{place.name}</a></p>
+                    <ListItem header={place.name} key={place.id}>
+                      <h5><a href={place.url} target="_blank" rel="noopener noreferrer">{place.name}</a></h5>
                       <p>{place.display_phone}</p>
                       {place.categories.map(categories =>
                       (
                         <i>{categories.title} </i>
                       ))}
-                    </CollapsibleItem>
+                    </ListItem>
                   ))}
-              </Collapsible>
+              </List>
             ) :
             (
               <h3>No Results</h3>
