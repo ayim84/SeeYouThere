@@ -25,6 +25,7 @@ export class MapContainer extends Component {
         }
     };
 
+
     shouldComponentUpdate(nextProps, nextState) {
         if (this.props.placesArray === nextProps.placesArray && this.state.showingInfoWindow === nextState.showingInfoWindow && this.state.selectedPlace === nextState.selectedPlace) {
             return false;
