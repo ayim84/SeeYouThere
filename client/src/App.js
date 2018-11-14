@@ -4,7 +4,7 @@ import {Row, Col, Input, Button, Icon, Container, Collapsible, CollapsibleItem, 
 import API from "./utils/API";
 import Nav from "./components/Nav/Nav.js";
 import MapContainer from "./components/MapContainer.js";
-import {List, ListItem} from "./components/List";
+import {List, ListItem, ListHeader} from "./components/List";
 
 class App extends Component {
   state =
@@ -228,11 +228,12 @@ class App extends Component {
         <Col s={4} offset="s8">
             {this.state.placesArray.length ?
             (
-              <List ref={(collapsible) => {this.collapsible = collapsible}}>
+              <List>
+                <ListHeader>Places</ListHeader>
                 {this.state.placesArray.map(place =>
                   (
                     <ListItem header={place.name} key={place.id}>
-                      <p><a href={place.url} target="_blank" rel="noopener noreferrer">{place.name}</a></p>
+                      <h5><a href={place.url} target="_blank" rel="noopener noreferrer">{place.name}</a></h5>
                       <p>{place.display_phone}</p>
                       {place.categories.map(categories =>
                       (
