@@ -32,7 +32,6 @@ class App extends Component {
   handleFormSubmit = event =>
   {
     event.preventDefault();
-    console.log("Submit event target: ", event.target);
 
     let locations = [];
 
@@ -226,7 +225,7 @@ class App extends Component {
               <Collapsible>
                 {this.state.placesArray.map(place =>
                   (
-                    <CollapsibleItem header={place.name}>
+                    <CollapsibleItem header={place.name} key={place.id}>
                       <p><a href={place.url} target="_blank" rel="noopener noreferrer">{place.name}</a></p>
                       <p>{place.display_phone}</p>
                       {place.categories.map(categories =>

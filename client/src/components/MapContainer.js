@@ -1,19 +1,39 @@
 import React, { Fragment, Component } from 'react';
-import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
+import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
 
 export class MapContainer extends Component {
-    shouldComponentUpdate(nextProps, nextState)
+    state =
         {
-            if(this.props.placesArray === nextProps.placesArray)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            showingInfoWindow: false,
+            activeMarker: {},
+            selectedPlace: {},
+        };
+
+    onMarkerClick = (props, marker, e) =>
+        this.setState({
+            selectedPlace: props,
+            activeMarker: marker,
+            showingInfoWindow: true
+        });
+
+    onMapClicked = (props) => {
+        if (this.state.showingInfoWindow) {
+            this.setState({
+                showingInfoWindow: false,
+                activeMarker: null
+            })
         }
-    
+    };
+
+    shouldComponentUpdate(nextProps, nextState) {
+        if (this.props.placesArray === nextProps.placesArray && this.state.showingInfoWindow === nextState.showingInfoWindow && this.state.selectedPlace === nextState.selectedPlace) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
     render() {
         console.log("props: ", this.props);
         // console.log("Locations Array: ", this.props.locationsArray[0]);
@@ -53,12 +73,14 @@ export class MapContainer extends Component {
                         }
                     }
                     bounds={bounds}
+                    onClick={this.onMapClicked}
                 >
                     {this.props.locationsArray.length > 0 ?
                         (
                             <Marker
-                                name={'Center'}
+                                name={'Center Point'}
                                 position={{ lat: this.props.centerLat, lng: this.props.centerLong }}
+                                onClick={this.onMarkerClick}
                             />
                         ) :
                         (
@@ -79,11 +101,13 @@ export class MapContainer extends Component {
                             >
                             </Marker>
                         ))}
-                    {this.props.placesArray.map(place => 
+                    {this.props.placesArray.map(place =>
                         (
                             <Marker
-                                position={{lat: place.coordinates.latitude, lng: place.coordinates.longitude}}
+                                name={place.name}
+                                position={{ lat: place.coordinates.latitude, lng: place.coordinates.longitude }}
                                 key={place.alias}
+                                onClick={this.onMarkerClick}
                                 icon=
                                 {
                                     {
@@ -92,6 +116,14 @@ export class MapContainer extends Component {
                                 }
                             />
                         ))}
+                    <InfoWindow
+                        marker={this.state.activeMarker}
+                        visible={this.state.showingInfoWindow}
+                    >
+                        <div>
+                            <p>{this.state.selectedPlace.name}</p>
+                        </div>
+                    </InfoWindow>
                 </Map>
             </Fragment>
         );
