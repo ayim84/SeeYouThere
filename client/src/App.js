@@ -36,6 +36,7 @@ class App extends Component {
     let locations = [];
 
     this.setState({locationsArray: []});
+    this.setState({locationsObjArray: []});
 
     locations.push(this.state.location1, this.state.location2, this.state.location3, this.state.location4);
     
@@ -219,13 +220,13 @@ class App extends Component {
           </Col>
         </Row>
         <Row>
-          <Col s={4} offset="s8">
+        <Col s={4} offset="s8">
             {this.state.placesArray.length ?
             (
               <Collapsible>
                 {this.state.placesArray.map(place =>
                   (
-                    <CollapsibleItem header={place.name}>
+                    <CollapsibleItem header={place.name} key={place.id}>
                       <p><a href={place.url} target="_blank" rel="noopener noreferrer">{place.name}</a></p>
                       <p>{place.display_phone}</p>
                       {place.categories.map(categories =>
