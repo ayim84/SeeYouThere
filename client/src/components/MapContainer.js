@@ -35,8 +35,7 @@ export class MapContainer extends Component {
     }
 
     render() {
-        console.log("props: ", this.props);
-        // console.log("Locations Array: ", this.props.locationsArray[0]);
+        // console.log("props: ", this.props);
 
         const style =
         {
@@ -49,8 +48,6 @@ export class MapContainer extends Component {
         for (let i = 0; i < this.props.locationsObjArray.length; i++) {
             bounds.extend(this.props.locationsObjArray[i]);
         }
-
-        console.log("Bounds: " + bounds);
 
         return (
             <Fragment>

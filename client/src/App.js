@@ -36,6 +36,7 @@ class App extends Component {
     let locations = [];
 
     this.setState({locationsArray: []});
+    this.setState({locationsObjArray: []});
 
     locations.push(this.state.location1, this.state.location2, this.state.location3, this.state.location4);
     
