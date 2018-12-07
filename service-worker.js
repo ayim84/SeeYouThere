@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.2/workbox-sw.js");
 
 importScripts(
-  "/seeyouthere/precache-manifest.16c4741d05b7c5faef98ee077cebae04.js"
+  "/SeeYouThere/precache-manifest.270475bea7a2dea18c3e42f06741877c.js"
 );
 
 workbox.clientsClaim();
@@ -28,7 +28,7 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("/seeyouthere/index.html", {
+workbox.routing.registerNavigationRoute("/SeeYouThere/index.html", {
   
   blacklist: [/^\/_/,/\/[^\/]+\.[^\/]+$/],
 });
