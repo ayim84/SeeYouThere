@@ -206,9 +206,9 @@ class App extends Component {
               onClick={this.handleFormSubmit}
             >
               Submit
-              <Icon right>
+              {/* <Icon right>
                 send
-              </Icon>
+              </Icon> */}
             </Button>
           </Col>
         </Row>
