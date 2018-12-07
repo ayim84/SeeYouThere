@@ -223,8 +223,6 @@ class App extends Component {
               showingInfoWindow={this.state.showingInfoWindow}
             />
           </Col>
-        </Row>
-        <Row>
         <Col s={4} offset="s8">
             {this.state.placesArray.length ?
             (
