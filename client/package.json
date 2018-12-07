@@ -2,10 +2,11 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://ayim84.github.io/seeyouthere",
+  "homepage": "https://ayim84.github.io/SeeYouThere/",
   "proxy": "http://localhost:3001",
   "dependencies": {
     "axios": "^0.18.0",
+    "gh-pages": "^2.0.1",
     "google-maps-react": "^2.0.2",
     "materialize-css": "^1.0.0-rc.2",
     "react": "^16.5.2",
