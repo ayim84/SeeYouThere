@@ -2,7 +2,7 @@ import React from "react";
 
 export const List = ({ children }) => {
   return (
-    <div>
+    <div> 
       <ul>
         {children}
       </ul>
