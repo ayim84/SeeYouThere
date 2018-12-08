@@ -20,7 +20,7 @@ self.__precacheManifest = [
     "url": "/SeeYouThere/static/css/main.1c84a6c9.chunk.css"
   },
   {
-    "revision": "c4d6d5a0199eb4d499760aa4a9e91606",
+    "revision": "a70cc534e9d0d383f76a69aee9ad74df",
     "url": "/SeeYouThere/index.html"
   }
 ];
