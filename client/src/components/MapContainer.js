@@ -91,7 +91,7 @@ export class MapContainer extends Component {
                                 icon=
                                 {
                                     {
-                                        url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                                        url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png"
                                     }
                                 }
                             >
@@ -107,7 +107,7 @@ export class MapContainer extends Component {
                                 icon=
                                 {
                                     {
-                                        url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+                                        url: "https://maps.google.com/mapfiles/ms/icons/green-dot.png"
                                     }
                                 }
                             />
